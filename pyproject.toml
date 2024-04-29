@@ -32,6 +32,7 @@ multi_line_output = 3
 exclude = '''
 /(
   | migrations
+  | .venv
 )/
 '''
 line_length = 120
