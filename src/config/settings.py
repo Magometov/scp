@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-wd)3s@(bwts5j^cp&jx$u7*s6v6a4whvnn8xcu#y^5ls3&*nde
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 
 # Application definition
@@ -38,11 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-
-    "src.apps.user",
-    "src.apps.task",
-    "src.apps.invitation",
-    "src.apps.event",
+    "src.apps.users",
+    "src.apps.tasks",
+    "src.apps.invitations",
+    "src.apps.events",
 ]
 
 MIDDLEWARE = [
@@ -108,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
+
+AUTH_USER_MODEL = "users.User"
 
 LANGUAGE_CODE = "en-us"
 
