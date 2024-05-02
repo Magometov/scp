@@ -9,6 +9,7 @@ packages = [{ include = "src" }]
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.0.4"
+django-stubs = {extras = ["compatible-mypy"], version = "^5.0.0"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,6 +26,9 @@ dotenv-linter = "^0.5.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dj = "manage:main"
 
 [tool.isort]
 profile = "black"
@@ -110,3 +114,17 @@ disallow_untyped_defs = true
 disallow_untyped_calls = false
 strict = true
 strict_equality = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "src.config.settings"
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.pylint.'pylint_options']
+disable = [
+    "C0114",  # Missing module docstring
+    "C0115",  # Missing class docstring
+    "C0116",  # Missing function or method docstring
+]
