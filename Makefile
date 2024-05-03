@@ -5,7 +5,7 @@ lint:
 	poetry run isort .
 
 check-migrations:
-	run dj makemigrations --check
+	poetry run dj makemigrations --check
 
 test:
 	poetry run pytest
