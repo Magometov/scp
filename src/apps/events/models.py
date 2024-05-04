@@ -3,10 +3,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
-from src.apps.base.models import BaseModel, DateTimeAbstractModel
+from src.apps.base.models import BaseModel, TimeStampedModel
 
 
-class Event(BaseModel, DateTimeAbstractModel):
+class Event(BaseModel, TimeStampedModel):
     title = models.CharField(verbose_name=_("Title"), max_length=100)
     description = models.CharField(verbose_name=_("Description"), max_length=200, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name=_("Author"), null=True)

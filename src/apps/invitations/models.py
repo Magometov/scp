@@ -3,12 +3,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
-from src.apps.base.models import BaseModel, DateTimeAbstractModel
+from src.apps.base.models import BaseModel, TimeStampedModel
 
 from .const import InvitationStatus
 
 
-class Invitation(BaseModel, DateTimeAbstractModel):
+class Invitation(BaseModel, TimeStampedModel):
     attendee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Attendee"))
     status = models.PositiveSmallIntegerField(
         verbose_name=_("Invitation status"),

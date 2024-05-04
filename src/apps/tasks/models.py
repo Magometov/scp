@@ -3,12 +3,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
-from src.apps.base.models import BaseModel, DateTimeAbstractModel
+from src.apps.base.models import BaseModel, TimeStampedModel
 
 from .const import TaskPriority, TaskStatus
 
 
-class Task(BaseModel, DateTimeAbstractModel):
+class Task(BaseModel, TimeStampedModel):
     description = models.TextField(verbose_name=_("Description"), blank=True)
     status = models.PositiveSmallIntegerField(
         verbose_name=_("Task status"), choices=TaskStatus.choices, default=TaskStatus.backlog

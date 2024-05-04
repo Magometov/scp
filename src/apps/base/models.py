@@ -1,26 +1,28 @@
 import uuid
-from typing import Any
 
 from django.db import models
-from django.utils import timezone
-from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
+from django_stubs_ext.db.models import TypedModelMeta
 
 
 class BaseModel(models.Model):
     id = models.UUIDField(verbose_name=_("ID"), primary_key=True, default=uuid.uuid4, editable=False)
 
-    class Meta:
+    class Meta(TypedModelMeta):
         abstract = True
 
 
-class DateTimeAbstractModel(models.Model):
-    created_at = models.DateTimeField(verbose_name=_("Created"), default=timezone.now, null=True)
-    updated_at = models.DateTimeField(verbose_name=_("Updated"), default=timezone.now, null=True)
+class TimeStampedModel(models.Model):
+    """
+    TimeStampedModel
 
-    class Meta:
+    An abstract base class model that provides self-managed "created" and
+    "modified" fields.
+    """
+
+    created = models.DateTimeField(_("created"), auto_now_add=True, editable=False, blank=True)
+    modified = models.DateTimeField(_("modified"), auto_now=True, editable=False, blank=True)
+
+    class Meta(TypedModelMeta):
+        get_latest_by = "modified"
         abstract = True
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.updated_at = make_aware(timezone.now())
-        super().save(*args, **kwargs)
