@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "src.apps.tasks",
     "src.apps.invitations",
     "src.apps.events",
+    "src.apps.base",
 ]
 
 MIDDLEWARE = [

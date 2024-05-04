@@ -1,15 +1,14 @@
-import uuid
-
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
+from src.apps.base.models import BaseModel, TimeStampedModel
+
 from .const import InvitationStatus
 
 
-class Invitation(models.Model):
-    id = models.UUIDField(verbose_name=_("ID"), primary_key=True, default=uuid.uuid4, editable=False)
+class Invitation(BaseModel, TimeStampedModel):
     attendee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Attendee"))
     status = models.PositiveSmallIntegerField(
         verbose_name=_("Invitation status"),
