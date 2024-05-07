@@ -15,4 +15,4 @@ class User(AbstractUser, BaseModel):
         default_related_name = "users"
 
     def __str__(self) -> str:
-        return f"Пользователь {self.id}-{self.username}"
+        return f"Пользователь {self.username}"
