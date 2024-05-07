@@ -18,7 +18,7 @@ class Invitation(BaseModel, TimeStampedModel):
     attendee: "models.ForeignKey[User, User]" = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Attendee")
     )
-    status: "models.PositiveSmallIntegerField[int, int]" = models.PositiveSmallIntegerField(
+    status: "models.PositiveSmallIntegerField[InvitationStatus, InvitationStatus]" = models.PositiveSmallIntegerField(
         verbose_name=_("Invitation status"),
         choices=InvitationStatus.choices,
         default=InvitationStatus.pending,
