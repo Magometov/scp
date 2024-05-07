@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -5,23 +7,31 @@ from django_stubs_ext.db.models import TypedModelMeta
 
 from src.apps.base.models import BaseModel, TimeStampedModel
 
+if TYPE_CHECKING:
+    from datetime import datetime
+    from src.apps.users.models import User
+
 from .const import TaskPriority, TaskStatus
 
 
 class Task(BaseModel, TimeStampedModel):
-    description = models.TextField(verbose_name=_("Description"), blank=True)
-    status = models.PositiveSmallIntegerField(
+    description: "models.TextField[str, str]" = models.TextField(verbose_name=_("Description"), blank=True)
+    status: "models.PositiveSmallIntegerField[int, int]" = models.PositiveSmallIntegerField(
         verbose_name=_("Task status"), choices=TaskStatus.choices, default=TaskStatus.backlog
     )
-    author = models.ForeignKey(
+    author: "models.ForeignKey[User, User]" = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("Author"),
         on_delete=models.CASCADE,
         blank=True,
     )
-    start = models.DateTimeField(verbose_name=_("Start"), blank=True, null=True)
-    end = models.DateTimeField(verbose_name=_("End"), blank=True, null=True)
-    priority = models.PositiveSmallIntegerField(
+    start: "models.DateTimeField[datetime | None, datetime | None]" = models.DateTimeField(
+        verbose_name=_("Start"), blank=True, null=True
+    )
+    end: "models.DateTimeField[datetime | None, datetime | None]" = models.DateTimeField(
+        verbose_name=_("End"), blank=True, null=True
+    )
+    priority: "models.PositiveSmallIntegerField[int | None, int | None]" = models.PositiveSmallIntegerField(
         verbose_name=_("Task priority"), choices=TaskPriority.choices, null=True, blank=True
     )
 
