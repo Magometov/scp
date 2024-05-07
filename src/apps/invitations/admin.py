@@ -4,18 +4,12 @@ from .models import Invitation
 
 
 @admin.register(Invitation)
-class InvitationAdmin(admin.ModelAdmin):
+class InvitationAdmin(admin.ModelAdmin):  # type: ignore
     list_display = (
-        "created",
-        "modified",
         "attendee",
         "status",
         "event",
+        "created",
+        "modified",
     )
     list_filter = ("created", "modified", "attendee", "event")
-
-    def get_exclude(self, request, obj=None):
-        if obj:
-            return ()
-        else:
-            return ("status",)

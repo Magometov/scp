@@ -15,6 +15,7 @@ from .const import TaskPriority, TaskStatus
 
 
 class Task(BaseModel, TimeStampedModel):
+    title: "models.CharField[str, str]" = models.CharField(verbose_name=_("Title"), max_length=50)
     description: "models.TextField[str, str]" = models.TextField(verbose_name=_("Description"), blank=True)
     status: "models.PositiveSmallIntegerField[TaskStatus, TaskStatus]" = models.PositiveSmallIntegerField(
         verbose_name=_("Task status"), choices=TaskStatus.choices, default=TaskStatus.backlog
@@ -31,8 +32,10 @@ class Task(BaseModel, TimeStampedModel):
     end: "models.DateTimeField[datetime | None, datetime | None]" = models.DateTimeField(
         verbose_name=_("End"), blank=True, null=True
     )
-    priority: "models.PositiveSmallIntegerField[TaskPriority, TaskPriority]" = models.PositiveSmallIntegerField(
-        verbose_name=_("Task priority"), choices=TaskPriority.choices, null=True, blank=True
+    priority: "models.PositiveSmallIntegerField[TaskPriority | None, TaskPriority | None]" = (
+        models.PositiveSmallIntegerField(
+            verbose_name=_("Task priority"), choices=TaskPriority.choices, null=True, blank=True
+        )
     )
 
     class Meta(TypedModelMeta):

@@ -4,22 +4,22 @@ from src.apps.events.models import Event
 from src.apps.invitations.models import Invitation
 
 
-class InvitationInline(admin.TabularInline):
+class InvitationInline(admin.TabularInline):  # type: ignore
     model = Invitation
     extra = 1
-    exclude = ("status",)
+    readonly_fields = ("status",)
 
 
 @admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):  # type: ignore
     inlines = [InvitationInline]
     list_display = (
-        "created",
-        "modified",
         "title",
         "description",
         "author",
         "start",
         "end",
+        "created",
+        "modified",
     )
     list_filter = ("created", "modified", "author", "start", "end")
