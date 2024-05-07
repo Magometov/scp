@@ -7,7 +7,7 @@ from .models import Task
 
 
 @admin.register(Task)
-class TaskAdmin(admin.ModelAdmin):  # type: ignore
+class TaskAdmin(admin.ModelAdmin[Task]):
     list_display: tuple[str, ...] = (
         "description",
         "status",

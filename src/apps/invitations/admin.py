@@ -4,7 +4,7 @@ from .models import Invitation
 
 
 @admin.register(Invitation)
-class InvitationAdmin(admin.ModelAdmin):  # type: ignore
+class InvitationAdmin(admin.ModelAdmin[Invitation]):
     list_display = (
         "attendee",
         "status",
