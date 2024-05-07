@@ -7,7 +7,7 @@ from src.apps.base.models import BaseModel
 
 
 class User(AbstractUser, BaseModel):
-    email = models.EmailField(verbose_name=_("Email"), max_length=50, unique=True)
+    email: "models.EmailField[str, str]" = models.EmailField(verbose_name=_("Email"), max_length=50, unique=True)  # type: ignore
 
     class Meta(TypedModelMeta):
         verbose_name = _("User")
