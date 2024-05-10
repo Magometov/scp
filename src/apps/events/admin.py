@@ -6,6 +6,7 @@ from src.apps.invitations.models import Invitation
 
 class InvitationInline(admin.TabularInline[Invitation, Event]):
     model = Invitation
+    parent_model = Event
     extra = 1
     readonly_fields = ("status",)
 
@@ -13,7 +14,7 @@ class InvitationInline(admin.TabularInline[Invitation, Event]):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin[Event]):
     inlines = [InvitationInline]
-    list_display = (
+    list_display: tuple[str, ...] = (
         "title",
         "description",
         "author",
