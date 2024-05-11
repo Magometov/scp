@@ -34,13 +34,18 @@ ALLOWED_HOSTS: list[str] = []
 # Application definition
 
 INSTALLED_APPS = [
+    # base
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party
     "django_extensions",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    # applications
     "src.apps.users",
     "src.apps.tasks",
     "src.apps.invitations",
@@ -89,6 +94,7 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",)}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
