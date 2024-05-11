@@ -10,6 +10,7 @@ from src.apps.base.models import BaseModel, TimeStampedModel
 if TYPE_CHECKING:
     from datetime import datetime
     from src.apps.users.models import User
+    from typing import Any
 
 from .const import TaskPriority, TaskStatus
 
@@ -53,5 +54,12 @@ class Task(BaseModel, TimeStampedModel):
             ),
         ]
 
+    def delete(self, *args: "Any", **kwargs: "Any") -> None:  # type: ignore
+        self.status = TaskStatus.cancelled
+        self.save()
+
     def __str__(self) -> str:
-        return f"Задача {self.id} от {self.author}"
+        return f"Task from {self.author}"
+
+    def __repr__(self) -> str:
+        return f"<Task: {self}>"
