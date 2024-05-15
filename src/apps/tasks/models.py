@@ -15,6 +15,16 @@ if TYPE_CHECKING:
 from .const import TaskPriority, TaskStatus
 
 
+class MyQuerySet(models.query.QuerySet):
+    def delete(self):
+        self.update(status=TaskStatus.cancelled)
+
+
+class NoDeleteManager(models.Manager):
+    def get_queryset(self):
+        return MyQuerySet(self.model, using=self._db)
+
+
 class Task(BaseModel, TimeStampedModel):
     title: "models.CharField[str, str]" = models.CharField(verbose_name=_("Title"), max_length=50)
     description: "models.TextField[str, str]" = models.TextField(verbose_name=_("Description"), blank=True)
@@ -38,6 +48,8 @@ class Task(BaseModel, TimeStampedModel):
             verbose_name=_("Task priority"), choices=TaskPriority.choices, null=True, blank=True
         )
     )
+
+    objects = NoDeleteManager()
 
     class Meta(TypedModelMeta):
         verbose_name = _("Task")
