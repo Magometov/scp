@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 
 from src.apps.events.models import Event
@@ -15,7 +14,7 @@ class InvitationInline(admin.TabularInline[Invitation, Event]):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin[Event]):
     inlines = [InvitationInline]
-    list_display: tuple = (
+    list_display = (
         "title",
         "description",
         "author",
@@ -24,7 +23,7 @@ class EventAdmin(admin.ModelAdmin[Event]):
         "created",
         "modified",
     )
-    list_filter: tuple = ("created", "modified", "author", "start", "end")
+    list_filter = ("created", "modified", "author", "start", "end")
 
     # def save_formset(self, request: "HttpRequest", form: "Any", formset: "Any", change: "Any") -> None:
     #     instances = formset.save(commit=False)
