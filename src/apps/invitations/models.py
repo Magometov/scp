@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -41,6 +41,10 @@ class Invitation(BaseModel, TimeStampedModel):
                 violation_error_message="This user already possesses an invitation to the event.",
             )
         ]
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def clean(self) -> None:
         super().clean()
