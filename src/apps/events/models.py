@@ -19,7 +19,10 @@ class Event(BaseModel, TimeStampedModel):
         verbose_name=_("Description"), max_length=200, blank=True
     )
     author: "models.ForeignKey[User | None, User | None]" = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name=_("Author"), null=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        verbose_name=_("Author"),
+        null=True,
     )
     start: "models.DateTimeField[datetime, datetime]" = models.DateTimeField(verbose_name=_("Start"))
     end: "models.DateTimeField[datetime, datetime]" = models.DateTimeField(verbose_name=_("End"))
