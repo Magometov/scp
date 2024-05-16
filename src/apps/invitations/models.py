@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
 from src.apps.base.models import BaseModel, TimeStampedModel
-
 from .const import InvitationStatus
 
 if TYPE_CHECKING:
@@ -34,7 +33,13 @@ class Invitation(BaseModel, TimeStampedModel):
         verbose_name = _("Invitation")
         verbose_name_plural = _("Invitations")
         default_related_name = "invitations"
-        unique_together = ("attendee", "event")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["attendee", "event"],
+                name="%(app_label)s_%(class)s_unique_pair_of_attendee_and_event",
+                violation_error_message="This user already possesses an invitation to the event.",
+            )
+        ]
 
     def clean(self) -> None:
         super().clean()
