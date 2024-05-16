@@ -17,6 +17,9 @@ class BaseModel(models.Model):
     class Meta(TypedModelMeta):
         abstract = True
 
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}: {self}>"
+
 
 class TimeStampedModel(models.Model):
     """

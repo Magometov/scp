@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
@@ -16,7 +17,9 @@ if TYPE_CHECKING:
 
 class Invitation(BaseModel, TimeStampedModel):
     attendee: "models.ForeignKey[User, User]" = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Attendee")
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("Attendee"),
     )
     status: "models.PositiveSmallIntegerField[InvitationStatus, InvitationStatus]" = models.PositiveSmallIntegerField(
         verbose_name=_("Invitation status"),
@@ -31,6 +34,13 @@ class Invitation(BaseModel, TimeStampedModel):
         verbose_name = _("Invitation")
         verbose_name_plural = _("Invitations")
         default_related_name = "invitations"
+        unique_together = ("attendee", "event")
+
+    def clean(self) -> None:
+        super().clean()
+
+        if self.event.author == self.attendee:
+            raise ValidationError("You can't invite an author to his own event.")
 
     def __str__(self) -> str:
-        return f"{self.attendee} -- {self.status}"
+        return f"{self.attendee} - {self.status}"
