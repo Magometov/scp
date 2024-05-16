@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
 from src.apps.base.models import BaseModel, TimeStampedModel
+
 from .const import InvitationStatus
 
 if TYPE_CHECKING:
