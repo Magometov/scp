@@ -14,7 +14,7 @@ class InvitationInline(admin.TabularInline[Invitation, Event]):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin[Event]):
     inlines = [InvitationInline]
-    list_display: tuple[str, ...] = (
+    list_display = (
         "title",
         "description",
         "author",

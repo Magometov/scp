@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin[Task]):
-    list_display: tuple[str, ...] = (
+    list_display = (
         "description",
         "status",
         "author",
@@ -26,9 +26,9 @@ class TaskAdmin(admin.ModelAdmin[Task]):
         "created",
         "modified",
     )
-    list_filter: tuple[str, ...] = ("created", "modified", "author", "start", "end")
+    list_filter = ("created", "modified", "author", "start", "end")
 
-    actions: list[str] = [
+    actions = [
         "make_cancelled",
     ]
 

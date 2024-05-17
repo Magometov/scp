@@ -5,7 +5,7 @@ from .models import Invitation
 
 @admin.register(Invitation)
 class InvitationAdmin(admin.ModelAdmin[Invitation]):
-    list_display: tuple[str, ...] = (
+    list_display = (
         "attendee",
         "status",
         "event",
