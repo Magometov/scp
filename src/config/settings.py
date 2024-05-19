@@ -15,7 +15,9 @@ from datetime import timedelta
 from pathlib import Path
 
 from django_stubs_ext import monkeypatch
+from dotenv import load_dotenv
 
+load_dotenv()
 monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "post_office",
     # applications
+    "src.apps.api_auth",
+    "src.apps.notifications",
     "src.apps.users",
     "src.apps.tasks",
     "src.apps.invitations",
@@ -150,3 +154,10 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "post_office.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", True)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "uJXp2@example.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "password")

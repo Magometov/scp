@@ -6,7 +6,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(
         f"{settings.API_PREFIX}/token/",
-        include("src.apps.auth.api.urls", namespace="tokens"),
+        include("src.apps.api_auth.api.urls", namespace="tokens"),
     ),
     path(
         f"{settings.API_PREFIX}/users/",
