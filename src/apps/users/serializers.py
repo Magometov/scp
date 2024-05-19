@@ -17,13 +17,9 @@ class UserCreateSerializer(serializers.ModelSerializer[User]):
         }
 
     def validate(self, attrs: Any) -> Any:
-        if attrs["password"] != attrs["repeat_of_password"]:
-            raise serializers.ValidationError("Passwords are not equal!")
+        if attrs["password"] != attrs.pop("repeat_of_password"):
+            raise serializers.ValidationError({"repeat_of_password": "Password mismatch"})
         return attrs
 
     def create(self, validated_data: Any) -> User:
-        del validated_data["repeat_of_password"]
-        user: User = User.objects.create_user(**validated_data)
-        user.is_active = False
-        user.save()
-        return user
+        return User.objects.create_user(**validated_data)
