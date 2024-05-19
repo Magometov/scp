@@ -7,7 +7,7 @@ from src.apps.users.models import User
 
 
 class UserCreateSerializer(serializers.ModelSerializer[User]):
-    repeat_of_password: "serializers.CharField" = serializers.CharField(max_length=128, write_only=True)
+    repeat_of_password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta(TypedModelMeta):
         model = User
