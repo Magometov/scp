@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "rest_framework_simplejwt",
+    "post_office",
     # applications
     "src.apps.users",
     "src.apps.tasks",
@@ -95,6 +97,8 @@ DATABASES = {
     }
 }
 
+API_PREFIX: str = os.environ.get("API_PREFIX", "api/v1")
+APP_SITE: str = os.environ.get("APP_SITE", "http://localhost:8000")
 REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",)}
 
 # Password validation
