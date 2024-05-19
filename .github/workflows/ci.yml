@@ -1,0 +1,30 @@
+name: Django CI
+on: pull_request
+jobs:
+  build_and_check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12.3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get install curl
+        curl -sSL 'https://install.python-poetry.org' | python -
+        poetry --version
+        python3 -m venv .venv
+        . .venv/bin/activate
+        poetry install
+        django-admin --version
+
+    - name: Run check
+      run: |
+        python manage.py makemigrations --check
+        mypy .
+        ruff .
+        isort .
