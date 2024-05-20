@@ -9,13 +9,12 @@ packages = [{ include = "src" }]
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.0.4"
+django-stubs = { extras = ["compatible-mypy"], version = "^5.0.0" }
 django-extensions = "^3.2.3"
 djangorestframework = "^3.15.1"
 djangorestframework-simplejwt = "^5.3.1"
 django-post-office = "^3.8.0"
 python-dotenv = "^1.0.1"
-psycopg = { extras = ["binary"], version = "^3.1.19" }
-django-stubs-ext = "^5.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.24.0"
@@ -27,6 +26,7 @@ django-stubs = { extras = ["compatible-mypy"], version = "^5.0.0" }
 djangorestframework-stubs = { extras = ["compatible-mypy"], version = "^3.15.0" }
 pre-commit = "^3.7.0"
 dotenv-linter = "^0.5.0"
+djangorestframework-stubs = { extras = ["compatible-mypy"], version = "^3.15.0" }
 
 [build-system]
 requires = ["poetry-core"]
@@ -82,12 +82,14 @@ lint.select = [
     "RUF008", # Do not use mutable default values for dataclass attributes
     "RUF009", # Do not perform function call {name} in dataclass defaults
     "RUF010", # Use explicit conversion flag
+    # NOTE: RUF011 has been remapped to B035
+    # "RUF011", # Dictionary comprehension uses static key: {key}
+    #  "RUF012",  # Mutable class attributes should be annotated with typing.ClassVar
     "RUF013", # PEP 484 prohibits implicit Optional
     "RUF015", # Prefer next({iterable}) over single element slice
     "RUF016", # Slice in indexed access to type {value_type} uses type {index_type} instead of an integer.
     "RUF100", # Unused noqa directive
     "RUF200", # Failed to parse pyproject.toml
-    "FIX002", # Line contains TODO, consider resolving the issue
 ]
 lint.ignore = [
     "N806", # Variable `UpperCase` in function should be lowercase
