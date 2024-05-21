@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.contrib.auth.password_validation import validate_password
 from django_stubs_ext.db.models import TypedModelMeta
 from rest_framework import serializers
 
@@ -25,6 +26,7 @@ class UserCreateSerializer(serializers.ModelSerializer[User]):
         }
 
     def validate(self, attrs: Any) -> Any:
+        validate_password(attrs["password"])
         if attrs["password"] != attrs.pop("repeat_of_password"):
             raise serializers.ValidationError({"repeat_of_password": "Password mismatch"})
         return attrs
