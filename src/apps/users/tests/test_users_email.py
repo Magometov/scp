@@ -3,6 +3,7 @@ from typing import Any
 import pytest
 from bs4 import BeautifulSoup
 from django.core.mail import EmailMultiAlternatives
+from django_stubs_ext import StrPromise
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
@@ -22,7 +23,7 @@ def user_data() -> dict[str, str]:
     }
 
 
-def parse_html_message(message: str) -> str:
+def parse_html_message(message: str | StrPromise) -> Any:
     soup = BeautifulSoup(message, "html.parser")
     links = soup.find_all("a")
     soup = BeautifulSoup(message, "html.parser")
@@ -33,7 +34,7 @@ def parse_html_message(message: str) -> str:
 
 @pytest.mark.django_db()
 def test_user_email_verification(
-    api_client: type[APIClient], user_data: dict[str, Any], mailoutbox: type[EmailMultiAlternatives]
+    api_client: type[APIClient], user_data: dict[str, Any], mailoutbox: list[EmailMultiAlternatives]
 ) -> None:
     client = api_client()
     response = client.post(
