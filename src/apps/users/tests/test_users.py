@@ -1,31 +1,32 @@
+import re
 from datetime import timedelta
 from typing import Any
 from urllib.parse import urlencode, urljoin
 
-import jwt
 import pytest
-from bs4 import BeautifulSoup
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from src.apps.api_auth.services.tokens import create_access_token
 from src.apps.users.models import User
+from src.conftest import UserData
 
 
-def parse_html_message(message: str) -> Any:
-    soup = BeautifulSoup(message, "html.parser")
-    links = soup.find_all("a")
-    for link in links:
-        return link.get("href")
+def get_link_from_message(message: str) -> Any:
+    pattern = rf"{settings.APP_SITE}{reverse("users:verify-user")}\?token=[\w\.-]+"
+    matches = re.findall(pattern, message)
+    return matches[0] if matches else None
 
 
 @pytest.mark.django_db()
 def test_user_email_verification(
     api_client: type[APIClient],
-    user_data: dict[str, str],
-    mailoutbox: Any,
+    user_data: UserData,
+    mailoutbox: list[EmailMultiAlternatives],
 ) -> None:
     client = api_client()
     response = client.post(reverse("users:sign-up"), data=user_data, format="json")
@@ -38,7 +39,7 @@ def test_user_email_verification(
     message = mailoutbox[0]
     assert message.to == [user.email]
 
-    href = parse_html_message(str(message.body))
+    href = get_link_from_message(str(message.body))
     response_from_verify = client.get(href)
     assert response_from_verify.status_code == status.HTTP_200_OK
 
@@ -49,17 +50,18 @@ def test_user_email_verification(
 @pytest.mark.django_db()
 def test_expired_token(
     api_client: type[APIClient],
-    user_create: type[User],
-    mailoutbox: Any,
+    user_create: User,
+    mailoutbox: list[EmailMultiAlternatives],
+    freezer: Any,
 ) -> None:
     user = user_create
     client = api_client()
-    expired_token = jwt.encode(
-        {"user_id": str(user.id), "exp": timezone.now() - timedelta(hours=1)}, settings.SECRET_KEY, algorithm="HS256"
-    )
+    initial_datetime = timezone.now()
+    token = create_access_token(user)
+    freezer.move_to(initial_datetime + timedelta(days=2))
     endpoint = reverse("users:verify-user")
     verify_email_link = urljoin(settings.APP_SITE, endpoint)
-    params = {"token": expired_token}
+    params = {"token": token}
     url_with_params = f"{verify_email_link}?{urlencode(params)}"
 
     response = client.get(url_with_params)

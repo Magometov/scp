@@ -1,7 +1,18 @@
+from typing import TypedDict
+
 import pytest
 from rest_framework.test import APIClient
 
 from src.apps.users.models import User
+
+
+class UserData(TypedDict):
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+    password: str
+    repeat_of_password: str
 
 
 @pytest.fixture()
@@ -10,7 +21,7 @@ def api_client() -> type[APIClient]:
 
 
 @pytest.fixture()
-def user_data() -> dict[str, str]:
+def user_data() -> UserData:
     return {
         "username": "test_user",
         "email": "test_user@ya.ru",
