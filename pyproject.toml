@@ -141,3 +141,6 @@ disable = [
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "src.config.settings"
 python_files = ["test_*.py", "*_test.py"]
+filterwarnings = [
+    "ignore:distutils Version classes are deprecated. Use packaging.version instead.:DeprecationWarning"
+]
