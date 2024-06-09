@@ -33,7 +33,7 @@ def user_data() -> UserData:
 
 
 @pytest.fixture()
-def user_create() -> User:
+def user() -> User:
     user = User.objects.create_user(
         username="Test",
         email="test@gmail.com",
