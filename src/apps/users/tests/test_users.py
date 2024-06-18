@@ -11,7 +11,6 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.settings import api_settings as jwt_settings
-from rest_framework_simplejwt.tokens import Token
 
 from src.apps.api_auth.services.tokens import create_access_token
 from src.apps.users.models import User
