@@ -95,6 +95,7 @@ def test_invalid_token(
     assert not mailoutbox
 
 
+@pytest.mark.django_db()
 def test_already_verified_token(
     api_client: type[APIClient],
     user: User,
@@ -112,6 +113,7 @@ def test_already_verified_token(
     assert response.status_code == status.HTTP_208_ALREADY_REPORTED
 
 
+@pytest.mark.django_db()
 def test_missing_token(api_client: type[APIClient]) -> None:
     client = api_client()
 
