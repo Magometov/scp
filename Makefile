@@ -11,3 +11,8 @@ check-migrations:
 
 test:
 	poetry run pytest
+
+ci: lint check-migrations test
+
+build:
+	docker-compose -f docker-compose.yml up -d --build

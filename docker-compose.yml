@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./
+    container_name: backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./:/app/
+    env_file:
+      - ./.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+
+  celery:
+    build: ./
+    command: celery --app=config worker
+    container_name: celery
+    volumes:
+      - ./:/app/
+    env_file:
+      - ./.env
+    depends_on:
+      - backend
+      - redis
+
+  flower:
+    build: ./
+    command: celery flower --app=config --port=5555 --broker=redis://redis:6379/0
+    container_name: flower
+    ports:
+      - "5555:5555"
+    env_file:
+      - ./.env
+    depends_on:
+      - backend
+      - redis
+      - celery
+
+  db:
+    image: postgres:16.3
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
