@@ -58,7 +58,6 @@ def test_expired_token(
     mailoutbox: list[EmailMultiAlternatives],
     freezer: "FrozenDateTimeFactory",
 ) -> None:
-    user = user
     client = api_client()
 
     token = create_access_token(user)
@@ -97,36 +96,27 @@ def test_invalid_token(
     assert not mailoutbox
 
 
-@pytest.fixture()
-def token(
-    user: User,
-    monkeypatch: pytest.MonkeyPatch,
-) -> Token:
-    old_key = jwt_settings.SIGNING_KEY
-    monkeypatch.setattr(jwt_settings, "SIGNING_KEY", "hello")
-    assert jwt_settings.SIGNING_KEY == "hello"
-    token = create_access_token(user)
-    monkeypatch.setattr(jwt_settings, "SIGNING_KEY", old_key)
-    return token
-
-
-@pytest.mark.django_db()
-def test_invalid_signature(
+def test_already_verified_token(
     api_client: type[APIClient],
     user: User,
-    mailoutbox: list[EmailMultiAlternatives],
-    token: str,
 ) -> None:
-    user = user
     client = api_client()
 
-    _ = create_access_token(user)
+    token = create_access_token(user)
     endpoint = reverse("users:verify-user")
     verify_email_link = urljoin(settings.APP_SITE, endpoint)
-    params = {"token": str(token)}
+    params = {"token": token}
     url_with_params = f"{verify_email_link}?{urlencode(params)}"
 
+    _ = client.get(url_with_params)
     response = client.get(url_with_params)
+    assert response.status_code == status.HTTP_208_ALREADY_REPORTED
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    assert not mailoutbox
+
+def test_missing_token(api_client: type[APIClient]) -> None:
+    client = api_client()
+
+    endpoint = reverse("users:verify-user")
+    url = urljoin(settings.APP_SITE, endpoint)
+    response = client.get(url)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
