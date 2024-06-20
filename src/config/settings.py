@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "src.apps.tasks",
     "src.apps.events",
     "src.apps.invitations",
+    "src.apps.celery_tasks",
 ]
 
 MIDDLEWARE = [
@@ -100,8 +101,8 @@ DATABASES = {
         "NAME": os.environ.get("POSTGRES_DB", "postgres"),
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
-        "HOST": os.environ.get("DB_POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("DB_POSTGRES_PORT", "5432"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 

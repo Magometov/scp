@@ -19,6 +19,7 @@ django-stubs-ext = "^5.0.0"
 celery = "^5.4.0"
 flower = "^2.0.1"
 
+redis = "^5.0.6"
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.24.0"
 ruff = "^0.4.2"
