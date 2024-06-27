@@ -27,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-wd)3s@(bwts5j^cp&jx$u7*s6v6a4whvnn8xcu#y^5ls3&*nde"
+SECRET_KEY = os.environ.get("SECRET_KEY", default="django-insecure-v6$@j@0-xcje+wg-)g*!0dm!tfdghf^&%3dfg%+f&5nn^fi0")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS: list[str] = []
+ALLOWED_HOSTS: list[str] = os.environ.get("DJANGO_ALLOWED_HOSTS", default="localhost 127.0.0.1 [::1]").split(" ")
 
 
 # Application definition
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "src.apps.tasks",
     "src.apps.events",
     "src.apps.invitations",
+    "src.apps.celery_tasks",
 ]
 
 MIDDLEWARE = [
@@ -96,8 +97,12 @@ WSGI_APPLICATION = "src.config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB", "postgres"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -128,6 +133,15 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
 }
+
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+
+# Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 AUTH_USER_MODEL = "users.User"
 
