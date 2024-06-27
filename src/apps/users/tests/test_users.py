@@ -116,8 +116,5 @@ def test_already_verified_token(
 @pytest.mark.django_db()
 def test_missing_token(api_client: type[APIClient]) -> None:
     client = api_client()
-
-    endpoint = reverse("users:verify-user")
-    url = urljoin(settings.APP_SITE, endpoint)
-    response = client.get(url)
+    response = client.get(reverse("users:verify-user"))
     assert response.status_code == status.HTTP_400_BAD_REQUEST
