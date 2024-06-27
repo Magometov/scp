@@ -1,3 +1,5 @@
+all: lint check-migrations test
+
 lint:
 	poetry run black .
 	poetry run ruff check .
@@ -9,5 +11,3 @@ check-migrations:
 
 test:
 	poetry run pytest
-
-ci: lint check-migrations test

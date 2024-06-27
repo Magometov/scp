@@ -10,7 +10,7 @@ from src.apps.users.models import User
 def verify_email_token(token: str) -> VerificationResponse:
     try:
         payload = decode_token(token=token, verify_exp=False)
-    except jwt.InvalidSignatureError:
+    except (jwt.InvalidSignatureError, jwt.exceptions.DecodeError):
         return VerificationResponse.INVALID
 
     user = get_object_or_404(User, id=payload["user_id"])
