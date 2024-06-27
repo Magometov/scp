@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification</title>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4;">
+
+<div class="container"
+     style="max-width: 600px; margin: 100px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <h1 style="font-size: 2em; margin-bottom: 20px;">Account Verification</h1>
+    <p style="font-size: 1.2em; margin-bottom: 30px;">Welcome, {{ username }}! We're glad you've
+        registered.</p>
+    <p style="font-size: 1.2em; margin-bottom: 30px;">To verify your account, please click the button below:</p>
+    <a class="verification-button"
+       style="display: inline-block; padding: 10px 20px; font-size: 1em; font-weight: bold; text-align: center; text-decoration: none; border-radius: 5px; color: #fff; background-color: #007bff; cursor: pointer; transition: background-color 0.3s;"
+       href="{{ verify_email_link }}">Verify</a>
+
+    <h5 style="font-size: 1em; margin-top: 20px;">If the button doesn't work, use this link instead:</h5>
+    <a style="font-size: 1em;" href="{{ verify_email_link }}">{{ verify_email_link }}</a>
+</div>
+
+</body>
+</html>

@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
 from django_stubs_ext import monkeypatch
+from dotenv import load_dotenv
 
+load_dotenv()
 monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,12 +49,15 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "rest_framework_simplejwt",
+    "post_office",
     # applications
+    "src.apps.base",
+    "src.apps.api_auth",
+    "src.apps.notifications",
     "src.apps.users",
     "src.apps.tasks",
-    "src.apps.invitations",
     "src.apps.events",
-    "src.apps.base",
+    "src.apps.invitations",
 ]
 
 MIDDLEWARE = [
@@ -95,6 +101,8 @@ DATABASES = {
     }
 }
 
+API_PREFIX: str = os.environ.get("API_PREFIX", "api/v1")
+APP_SITE: str = os.environ.get("APP_SITE", "http://localhost:8000")
 REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",)}
 
 # Password validation
@@ -121,28 +129,31 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 AUTH_USER_MODEL = "users.User"
 
+# Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "post_office.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", True)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "uJXp2@example.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "password")
+POST_OFFICE = {
+    "DEFAULT_PRIORITY": "now",
+}
