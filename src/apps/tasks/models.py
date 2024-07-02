@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 
 from src.apps.base.models import BaseModel, TimeStampedModel
+from src.apps.base.softdelete.models import SoftDeleteModel
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 from .const import TaskPriority, TaskStatus
 
 
-class Task(BaseModel, TimeStampedModel):
+class Task(SoftDeleteModel, BaseModel, TimeStampedModel):
     title: "models.CharField[str, str]" = models.CharField(verbose_name=_("Title"), max_length=50)
     description: "models.TextField[str, str]" = models.TextField(verbose_name=_("Description"), blank=True)
     status: "models.PositiveSmallIntegerField[TaskStatus, TaskStatus]" = models.PositiveSmallIntegerField(
@@ -54,4 +55,7 @@ class Task(BaseModel, TimeStampedModel):
         ]
 
     def __str__(self) -> str:
-        return f"Задача {self.id} от {self.author}"
+        return f"Task from {self.author}"
+
+    def __repr__(self) -> str:
+        return f"<Task: {self}>"
